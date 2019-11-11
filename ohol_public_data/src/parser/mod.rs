@@ -25,8 +25,7 @@ fn death_entry(i: &str) -> IResult<&str, LifeLogEntry> {
 fn life_log_entry(i: &str) -> IResult<&str, LifeLogEntry> {
   let (rem, (line, _eol)) = pair(not_line_ending, line_ending)(i)?;
   let entry = match all_consuming(alt((birth_entry, death_entry)))(line) {
-    Ok(("", entry)) => entry,
-    Ok(_) => unreachable!(),
+    Ok((_, entry)) => entry,
     Err(_) => LifeLogEntry::Error(line.to_string()),
   };
   Ok((rem, entry))
