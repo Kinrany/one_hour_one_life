@@ -1,11 +1,9 @@
-use ohol_public_data::life_log::{
-  death::Cause::*, entry::LifeLogEntry, TARGET,
-};
+use ohol_public_data::{Cause::*, LifeLogEntry, TARGET};
 use std::env::args;
 
 fn main() {
   let arg = args().nth(1).expect("No command given");
-  match ohol_public_data::life_log::get::get(TARGET) {
+  match ohol_public_data::get(TARGET) {
     Ok(entries) => match arg.as_str() {
       "first_4" => print_first_4(entries.into_iter()),
       "unknown_causes" => print_unknown_causes(entries.into_iter()),

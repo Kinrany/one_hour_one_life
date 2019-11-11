@@ -1,7 +1,5 @@
-use super::{
-  super::common::{coords::*, player_id::*, sex::*, *},
-  Birth,
-};
+use super::common::*;
+use crate::{Birth, PlayerId};
 use nom::{
   branch::alt,
   bytes::complete::tag,
