@@ -3,6 +3,12 @@ name = "ohol_public_data"
 version = "0.1.0"
 authors = ["Kinrany <kinrany@yandex.com>"]
 edition = "2018"
+readme = "README.md"
+keywords = ["one-hour-one-life", "onelife", "ohol"]
+categories = ["data-structures", "encoding", "parser-implementations"]
+license = "MPL-2.0"
+description = "Client and data format for One Hour One Life's public data"
+repository = "https://github.com/Kinrany/one_hour_one_life.git"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
