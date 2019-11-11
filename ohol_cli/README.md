@@ -1,1 +1,1 @@
-CLI for experimenting with [ohol-soul-score](../ohol-soul-score/README.md).
+CLI for running scripts from command line
