@@ -1,9 +1,8 @@
 mod parser;
+pub mod url;
 
 use anyhow::{anyhow, Result};
 use nom::combinator::all_consuming;
-
-pub const TARGET: &'static str = "http://publicdata.onehouronelife.com/publicLifeLogData/lifeLog_bigserver2.onehouronelife.com/2019_11November_10_Sunday.txt";
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct PlayerId(usize);

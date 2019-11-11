@@ -1,9 +1,10 @@
-use ohol_public_data::{Cause::*, LifeLogEntry, TARGET};
+use ohol_public_data::{url::build_url, Cause::*, LifeLogEntry};
 use std::env::args;
 
 fn main() {
   let arg = args().nth(1).expect("No command given");
-  match ohol_public_data::get(TARGET) {
+  let url = build_url("bigserver2", 2019, 01, 30);
+  match ohol_public_data::get(&url) {
     Ok(entries) => match arg.as_str() {
       "first_4" => print_first_4(entries.into_iter()),
       "unknown_causes" => print_unknown_causes(entries.into_iter()),
