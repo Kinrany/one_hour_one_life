@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+  "ohol_public_data",
+  "ohol_soul_score",
+  "ohol_cli"
+]
