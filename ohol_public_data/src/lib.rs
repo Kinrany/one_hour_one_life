@@ -1,4 +1,4 @@
-mod de;
+mod parser;
 
 use reqwest::Result;
 
@@ -59,7 +59,7 @@ pub fn get() -> Result<Vec<Entry>> {
   let result = reqwest::get(TARGET)?
     .text()?
     .lines()
-    .map(|line| de::parser::entry(line).unwrap().1)
+    .map(|line| parser::entry(line).unwrap().1)
     .collect();
   Ok(result)
 }
