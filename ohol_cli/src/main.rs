@@ -25,9 +25,12 @@ fn print_unknown_causes<E>(entries: E)
 where
   E: Iterator<Item = LifeLogEntry> + Sized,
 {
-  unknown_causes(entries)
-    .into_iter()
-    .for_each(|entry| println!("{:?}", entry));
+  let causes = unknown_causes(entries);
+  if causes.len() > 0 {
+    causes.into_iter().for_each(|entry| println!("{:?}", entry));
+  } else {
+    println!("No unknown causes of death found.");
+  }
 }
 
 fn unknown_causes<E>(entries: E) -> Vec<String>
