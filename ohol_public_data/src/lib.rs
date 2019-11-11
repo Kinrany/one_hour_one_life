@@ -1,7 +1,7 @@
 mod parser;
 
+use anyhow::{anyhow, Result};
 use nom::combinator::all_consuming;
-use thiserror::Error;
 
 pub const TARGET: &'static str = "http://publicdata.onehouronelife.com/publicLifeLogData/lifeLog_bigserver2.onehouronelife.com/2019_11November_10_Sunday.txt";
 
@@ -59,18 +59,10 @@ pub enum LifeLogEntry {
 
 pub type LifeLog = Vec<LifeLogEntry>;
 
-#[derive(Debug, Error)]
-pub enum Error {
-  #[error("failed to fetch data")]
-  Request(#[from] reqwest::Error),
-  #[error("failed to parse data")]
-  Parsing(String),
-}
-
-pub fn get(target: &str) -> Result<LifeLog, Error> {
+pub fn get(target: &str) -> Result<LifeLog> {
   let text = reqwest::get(target)?.text()?;
   let parser = all_consuming(parser::life_log);
   parser(&text)
-    .or_else(|err| Err(Error::Parsing(format!("{:?}", err))))
+    .or_else(|err| Err(anyhow!(format!("{:?}", err))))
     .map(|(_, life_log)| life_log)
 }
