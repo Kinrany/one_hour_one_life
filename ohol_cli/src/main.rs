@@ -1,9 +1,9 @@
-use ohol_public_data::{Cause::*, Entry, Entry::*};
+use ohol_public_data::{Cause::*, LifeLogEntry, TARGET};
 use std::env::args;
 
 fn main() {
   let arg = args().nth(1).expect("No command given");
-  match ohol_public_data::get() {
+  match ohol_public_data::get(TARGET) {
     Ok(entries) => match arg.as_str() {
       "first_4" => print_first_4(entries.into_iter()),
       "unknown_causes" => print_unknown_causes(entries.into_iter()),
@@ -15,14 +15,14 @@ fn main() {
 
 fn print_first_4<E>(entries: E)
 where
-  E: Iterator<Item = Entry> + Sized,
+  E: Iterator<Item = LifeLogEntry> + Sized,
 {
   entries.take(4).for_each(|entry| println!("{:?}", entry));
 }
 
 fn print_unknown_causes<E>(entries: E)
 where
-  E: Iterator<Item = Entry> + Sized,
+  E: Iterator<Item = LifeLogEntry> + Sized,
 {
   unknown_causes(entries)
     .into_iter()
@@ -31,12 +31,13 @@ where
 
 fn unknown_causes<E>(entries: E) -> Vec<String>
 where
-  E: Iterator<Item = Entry> + Sized,
+  E: Iterator<Item = LifeLogEntry> + Sized,
 {
   let deaths = entries
     .map(|entry| match entry {
-      Death(death) => Some(death),
-      Birth(_) => None,
+      LifeLogEntry::Death(death) => Some(death),
+      LifeLogEntry::Birth(_) => None,
+      LifeLogEntry::Error(_) => None,
     })
     .filter(|death| death.is_some())
     .map(|death| death.unwrap());
