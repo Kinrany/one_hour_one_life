@@ -1,10 +1,12 @@
-use crate::{Coords, PlayerId, Sex};
+pub mod coords;
+pub mod player_id;
+pub mod sex;
+
 use nom::{
-  branch::alt,
   bytes::complete::{tag, take, take_while_m_n},
   character::complete::{char, digit1},
   combinator::{map, map_res, opt, value},
-  sequence::{pair, tuple},
+  sequence::pair,
   IResult,
 };
 
@@ -29,27 +31,9 @@ pub fn unix_time(i: &str) -> IResult<&str, usize> {
   map_res(take(10usize), |unix_time: &str| unix_time.parse::<usize>())(i)
 }
 
-pub fn player_id(i: &str) -> IResult<&str, PlayerId> {
-  map(unsigned, |id| PlayerId(id))(i)
-}
-
 pub fn email_hash(i: &str) -> IResult<&str, String> {
   let parser = take_while_m_n(40, 40, |chr: char| chr.is_digit(16));
   map(parser, &str::to_string)(i)
-}
-
-pub fn sex(i: &str) -> IResult<&str, Sex> {
-  let parser = alt((char('F'), char('M')));
-  map(parser, |chr| match chr {
-    'F' => Sex::Female,
-    'M' => Sex::Male,
-    _ => unreachable!(),
-  })(i)
-}
-
-pub fn coords(i: &str) -> IResult<&str, Coords> {
-  let parser = tuple((char('('), integer, char(','), integer, char(')')));
-  map(parser, |(_, x, _, y, _)| Coords(x, y))(i)
 }
 
 pub fn pop(i: &str) -> IResult<&str, usize> {
@@ -82,24 +66,8 @@ mod tests {
   }
 
   #[test]
-  fn parsing_player_id_succeeds() {
-    assert_eq!(player_id("2256651"), Ok(("", PlayerId(2256651))));
-  }
-
-  #[test]
   fn parsing_email_hash_succeeds() {
     assert!(email_hash("c5c94e5501424d0567c90730f5e2e6ad482a440f").is_ok());
-  }
-
-  #[test]
-  fn parsing_sex_succeeds() {
-    assert_eq!(sex("F"), Ok(("", Sex::Female)));
-    assert_eq!(sex("M"), Ok(("", Sex::Male)));
-  }
-
-  #[test]
-  fn parsing_coords_succeeds() {
-    assert_eq!(coords("(-2923,-1233)"), Ok(("", Coords(-2923, -1233))));
   }
 
   #[test]

@@ -1,5 +1,5 @@
-use super::common::*;
-use crate::{Cause, Death};
+use super::super::common::{coords::*, player_id::*, sex::*, *};
+use super::{Cause, Death};
 use nom::{
   branch::alt,
   bytes::complete::{tag, take_while1},
