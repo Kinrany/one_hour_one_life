@@ -4,6 +4,7 @@ pub mod url;
 use anyhow::{anyhow, Result};
 use chrono::NaiveDateTime;
 use nom::combinator::all_consuming;
+use std::fmt;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct PlayerId(usize);
@@ -14,8 +15,14 @@ pub enum Sex {
   Male,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, PartialEq)]
 pub struct Coords(isize, isize);
+
+impl fmt::Debug for Coords {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "({}, {})", self.0, self.1)
+  }
+}
 
 #[derive(Clone, Debug)]
 pub struct Birth {
