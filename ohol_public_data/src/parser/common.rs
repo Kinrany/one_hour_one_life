@@ -1,9 +1,10 @@
 use crate::{Coords, PlayerId, Sex};
+use chrono::NaiveDateTime;
 use nom::{
   branch::alt,
   bytes::complete::{tag, take, take_while_m_n},
   character::complete::{char, digit1},
-  combinator::{map, map_res, opt, value},
+  combinator::{map, map_opt, map_res, opt, value},
   sequence::{pair, tuple},
   IResult,
 };
@@ -25,8 +26,11 @@ pub fn integer(i: &str) -> IResult<&str, isize> {
   })(i)
 }
 
-pub fn unix_time(i: &str) -> IResult<&str, usize> {
-  map_res(take(10usize), |unix_time: &str| unix_time.parse::<usize>())(i)
+pub fn unix_time(i: &str) -> IResult<&str, NaiveDateTime> {
+  map_opt(take(10usize), |unix_time: &str| {
+    let unix_time = unix_time.parse::<usize>().ok()?;
+    NaiveDateTime::from_timestamp_opt(unix_time as i64, 0)
+  })(i)
 }
 
 pub fn player_id(i: &str) -> IResult<&str, PlayerId> {
@@ -78,7 +82,10 @@ mod tests {
 
   #[test]
   fn parsing_unix_time_succeeds() {
-    assert_eq!(unix_time("1573344045"), Ok(("", 1573344045)));
+    let expected_date =
+      NaiveDateTime::parse_from_str("2019-11-10 00:00:45", "%Y-%m-%d %H:%M:%S")
+        .unwrap();
+    assert_eq!(unix_time("1573344045"), Ok(("", expected_date)));
   }
 
   #[test]

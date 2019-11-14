@@ -2,6 +2,7 @@ mod parser;
 pub mod url;
 
 use anyhow::{anyhow, Result};
+use chrono::NaiveDateTime;
 use nom::combinator::all_consuming;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -18,7 +19,7 @@ pub struct Coords(isize, isize);
 
 #[derive(Clone, Debug)]
 pub struct Birth {
-  pub unix_time: usize,
+  pub unix_time: NaiveDateTime,
   pub player_id: PlayerId,
   pub email_hash: String,
   pub sex: Sex,
@@ -39,7 +40,7 @@ pub enum Cause {
 
 #[derive(Clone, Debug)]
 pub struct Death {
-  pub unix_time: usize,
+  pub unix_time: NaiveDateTime,
   pub player_id: PlayerId,
   pub email_hash: String,
   pub age: f32,
